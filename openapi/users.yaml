@@ -1,0 +1,516 @@
+paths:
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Đăng nhập vào hệ thống
+      description: Đăng nhập vào hệ thống theo email và password
+      operationId: login
+      requestBody:
+        description: Nhập email và password người dùng để login
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginReq'
+        required: true
+      responses:
+        '200':
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Login Successfully'
+                  result:
+                    $ref: '#/components/schemas/AuthRes'
+        '401':
+          description: Email or Password invalid
+        '422':
+          description: Validation Error
+  /users/me:
+    get:
+      tags:
+        - users
+      summary: Lấy thông tin user đăng nhập
+      description: Lấy thông tin user đăng nhập
+      operationId: me
+      responses:
+        '200':
+          description: Lấy thông tin thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Get user successfully'
+                  result:
+                    $ref: '#/components/schemas/User'
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - users
+      summary: Cập nhập thông tin User
+      description: Cập nhập thông tin User
+      operationId: me
+      requestBody:
+        description: Nhập thông tin cần cập nhật của user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPatchReq'
+        required: true
+      responses:
+        '200':
+          description: Cập nhật thông tin thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Update user information successfully'
+                  result:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation Error
+      security:
+        - bearerAuth: []
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Đăng ký tài khoản
+      description: Đăng ký tài khoản cho user mới
+      operationId: register
+      requestBody:
+        description: Nhập thông tin đăng ký
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterReq'
+        required: true
+      responses:
+        '200':
+          description: Lấy thông tin thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Success! Register'
+                  result:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        format: MongoId
+                        example: '665c43b72a97e567e4167f3a'
+        '422':
+          description: 'Validation Body'
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Đăng xuất
+      description: Đăng xuất khỏi hệ thống
+      operationId: logout
+      requestBody:
+        description: Nhập email và password người dùng để login
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY1OTc2ODA1YTU1MjZjNzAyNmQyN2E1IiwidHlwZSI6MSwic3RhdHVzX3VzZXIiOjEsImlhdCI6MTcxNzgzODk2OCwiZXhwIjoxNzI2NDc4OTY4fQ.CbvWizLiqoHXeQClVcdgB0IXS3_xvP17kxdYJsE6O6U
+        required: true
+      responses:
+        '200':
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Logout successfully'
+        '422':
+          description: 'Unauthorization'
+      security:
+        - bearerAuth: []
+  /users/refresh-token:
+    post:
+      tags:
+        - users
+      summary: Refresh Token
+      description: Refresh Token cho user
+      operationId: refresh_token
+      requestBody:
+        description: Gửi refresh token của user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY1OTc2ODA1YTU1MjZjNzAyNmQyN2E1IiwidHlwZSI6MSwic3RhdHVzX3VzZXIiOjEsImlhdCI6MTcxNzg0MjA2MiwiZXhwIjoxNzI2NDgyMDYyfQ.cXVCBvoTwDJpB0DYw1w3bWwj8SqjbAkTOWZWMSrZaPs
+        required: true
+      responses:
+        '200':
+          description: Refresh token thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Refresh token successfully'
+                  result:
+                    $ref: '#/components/schemas/AuthRes'
+        '401':
+          description: Validation Token
+  /users/verify-email:
+    post:
+      tags:
+        - users
+      summary: Verify Email
+      description: Verify Email người dùng khi đăng ký thành công
+      operationId: verify_email
+      requestBody:
+        description: email verify token của user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_verify_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY2NDJjYTI5MjcwY2I0NzQ1YzI1NGM2Iiwic3RhdHVzX3VzZXIiOjAsInR5cGUiOjIsImlhdCI6MTcxNzg0MTA1OCwiZXhwIjoxNzE4NDQ1ODU4fQ.lNLjho495dHDaNUE0N6Snz0-eUhUNJfGaWonjQu6rsA
+        required: true
+      responses:
+        '200':
+          description: Verify Email thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Verify email successfully'
+                  result:
+                    $ref: '#/components/schemas/AuthRes'
+        '401':
+          description: Validation Token
+  /users/resend-verify-email:
+    post:
+      tags:
+        - users
+      summary: Gửi lại email
+      description: Gửi lại email để xác thực tài khoản
+      operationId: resend_email
+      requestBody:
+        description: Gửi user_id cần xác thực email
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  format: MongoId
+                  example: 66642dc559b414be7cbcbd8f
+        required: true
+      responses:
+        '200':
+          description: Gửi lại mail xác thực thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email verify sent again
+        '400':
+          description: user_id invalid
+  /users/forgot-password:
+    post:
+      tags:
+        - users
+      summary: Quên mật khẩu
+      description: Người dùng quên mật khẩu
+      operationId: forgot_password
+      requestBody:
+        description: Nhập email người dùng
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'buikhaminh2003@gmail.com'
+        required: true
+      responses:
+        '200':
+          description: Gửi mail xác nhận quên mật khẩu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Have sent forgot password verify on email
+        '400':
+          description: Not found user
+        '422':
+          description: Validation Email
+  /users/verify-forgot-password:
+    post:
+      tags:
+        - users
+      summary: Xác thực token quên mật khẩu
+      description: Người dùng xác thực email quên mật khẩu
+      operationId: verify_forgot_password
+      requestBody:
+        description: Token quên mật khẩu
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verify_forgot_password:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY1ZmNhYzUwMWFmNjEzNWUxOWM1NjY0Iiwic3RhdHVzX3VzZXIiOjAsInR5cGUiOjMsImlhdCI6MTcxNzg0NzcyMywiZXhwIjoxNzE4NDUyNTIzfQ.u-6CXM7Dir4rvynC-_3yQ6VWddtjpDxeKYPY2LIVH0U'
+        required: true
+      responses:
+        '200':
+          description: Xác thực token quên mật khẩu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forgot password verify token is successfull
+        '401':
+          description: Unauthorization
+  /users/reset-password:
+    post:
+      tags:
+        - users
+      summary: Reset Password
+      description: Reset Password khi người dùng xác thực token thành công
+      operationId: reset_password
+      requestBody:
+        description: Token quên mật khẩu và mật khẩu mới
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordReq'
+        required: true
+      responses:
+        '200':
+          description: Reset Password thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forgot password verify token is successfull
+        '401':
+          description: Unauthorization
+        '422':
+          description: Validation Error
+  /users/change-password:
+    post:
+      tags:
+        - users
+      summary: Change Password
+      description: Thay đổi password
+      operationId: change_password
+      requestBody:
+        description:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordReq'
+        required: true
+      responses:
+        '200':
+          description: Change Password thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Change password successfully
+        '401':
+          description: Unauthorization
+        '422':
+          description: Validation Error
+      security:
+        - bearerAuth: []
+  /users/follow:
+    post:
+      tags:
+        - users
+      summary: Theo dõi
+      description: Theo dõi người dùng khác
+      operationId: follow
+      requestBody:
+        description: Gửi Id người được follow
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                followed_user_id:
+                  type: string
+                  follow: MongoId
+                  example: 665fcac501af6135e19c5664
+        required: true
+      responses:
+        '200':
+          description: Theo dõi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User follow successfully
+        '401':
+          description: Unauthorization
+        '403':
+          description: Followed User Not Verified Account
+        '404':
+          description: Not Found Followed User
+      security:
+        - bearerAuth: []
+  /users/follow/{followed_user_id}:
+    delete:
+      tags:
+        - users
+      summary: Unfollow User
+      description: Hủy theo dõi người dùng
+      operationId: unfollow
+      parameters:
+        - name: followed_user_id
+          in: path
+          description: ID of unfollowed user
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 665976805a5526c7026d27a5
+      responses:
+        '200':
+          description: Hủy theo dõi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unfollow successfully
+        '401':
+          description: Unauthorization
+        '404':
+          description: Not Found Followed User
+      security:
+        - bearerAuth: []
+  /users/{username}:
+    get:
+      tags:
+        - users
+      summary: Get Info User
+      description: Lấy thông tin người dùng
+      operationId: get_user
+      parameters:
+        - name: username
+          in: path
+          description: Username of User
+          required: true
+          schema:
+            type: string
+            example: minhbui
+      responses:
+        '200':
+          description: Lấy thông tin người dùng thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Get user information successfully'
+                  result:
+                    $ref: '#/components/schemas/User'
+  /users/user-circle:
+    patch:
+      tags:
+        - users
+      summary: Patch User Circle
+      description: Cập nhập circle người dùng
+      operationId: user_circle
+      requestBody:
+        description: Danh sách cái ID User
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_circle:
+                  type: array
+                  items:
+                    type: string
+                    format: MongoId
+                  example: ['665d5acd53ec3482a802a277']
+        required: true
+      responses:
+        '200':
+          description: Cập nhật thông tin circle thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Updated user circle successfully'
+                  result:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorization
+        '403':
+          description: Forbidden
+      security:
+        - bearerAuth: []

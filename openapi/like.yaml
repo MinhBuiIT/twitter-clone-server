@@ -1,0 +1,108 @@
+paths:
+  /like:
+    post:
+      tags:
+        - like
+      summary: Like Tweet
+      description: Thích một bài Tweet
+      operationId: like
+      requestBody:
+        description: Gửi Id Tweet
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tweet_id:
+                  type: string
+                  follow: MongoId
+                  example: 665c43c12a97e567e4169515
+        required: true
+      responses:
+        '200':
+          description: Thích bài tweet thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Like added successfully
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '404':
+          description: Not Found Tweet
+      security:
+        - bearerAuth: []
+  /like/tweet/{tweet_id}:
+    delete:
+      tags:
+        - like
+      summary: Unlike Tweet
+      description: Hủy thích một bài Tweet
+      operationId: unlike
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 665c43c12a97e567e4169515
+      responses:
+        '200':
+          description: Hủy thích bài tweet thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unlike successfully
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '404':
+          description: Not Found Tweet
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - like
+      summary: Check User Like a Tweet
+      description: Kiểm tra người dùng like bài tweet
+      operationId: check_like
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 665c43c12a97e567e4169515
+      responses:
+        '200':
+          description: Người dùng đã like bài tweet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get like successfully
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '404':
+          description: User Not Like Tweet
+      security:
+        - bearerAuth: []

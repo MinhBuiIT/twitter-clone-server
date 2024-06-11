@@ -1,0 +1,219 @@
+paths:
+  /tweet:
+    post:
+      tags:
+        - tweets
+      summary: Đăng bài tweet
+      description: Đăng bài tweet mới
+      operationId: post_tweet
+      requestBody:
+        description: Nhập thông tin bài tweet
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TweetReq'
+        required: true
+      responses:
+        '200':
+          description: Đăng bài tweet thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post a tweet successfully
+                  result:
+                    $ref: '#/components/schemas/Tweet'
+        '401':
+          description: Unauthorization
+        '422':
+          description: Validation Error
+      security:
+        - bearerAuth: []
+  /tweet/new-tweets:
+    get:
+      tags:
+        - tweets
+      summary: New Tweet
+      description: Lấy bài tweet mới của mình và của người mình follow
+      operationId: new_tweet
+      parameters:
+        - name: page
+          in: query
+          description: Page in pagination
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Limit in pagination
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Lấy New Tweet thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get New Tweet Successfully
+                  result:
+                    type: object
+                    properties:
+                      tweets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FullTweet'
+                      page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      total_page:
+                        type: integer
+                        example: 1
+
+        '401':
+          description: Unauthorization
+        '422':
+          description: Query Pagination Invalid
+      security:
+        - bearerAuth: []
+  /tweet/{tweet_id}:
+    get:
+      tags:
+        - tweets
+      summary: Get Tweet
+      description: Lấy thông tin bài Tweet by Id
+      operationId: get_tweet
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 665c43c12a97e567e4169515
+
+      responses:
+        '200':
+          description: Lấy thông tin Tweet thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get New Tweet Successfully
+                  result:
+                    allOf:
+                      - $ref: '#/components/schemas/FullTweet'
+                      - type: object
+                        properties:
+                          page:
+                            type: integer
+                            example: 1
+                          limit:
+                            type: integer
+                            example: 10
+                          total_page:
+                            type: integer
+                            example: 1
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '403':
+          description: User account does not have sufficient permissions for tweet
+        '404':
+          description: Not Found Tweet
+      security:
+        - bearerAuth: []
+  /tweet/{tweet_id}/child:
+    get:
+      tags:
+        - tweets
+      summary: Get Tweet Child
+      description: Lấy thông tin các bài Tweet Child của một Tweet
+      operationId: get_tweet_child
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 665c43c12a97e567e4169515
+        - name: page
+          in: query
+          description: Page in pagination
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Limit in pagination
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: tweet_type
+          in: query
+          description: Type of Tweet
+          required: true
+          schema:
+            $ref: '#/components/schemas/TweetType'
+      responses:
+        '200':
+          description: Lấy danh sách các tweet child thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get Tweet Child Successfully
+                  result:
+                    type: object
+                    properties:
+                      tweets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FullTweet'
+                      tweet_type:
+                        type: integer
+                        example: 2
+                      page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      total_page:
+                        type: integer
+                        example: 1
+
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '403':
+          description: User account does not have sufficient permissions for tweet
+        '404':
+          description: Not Found Tweet
+      security:
+        - bearerAuth: []

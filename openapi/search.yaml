@@ -1,0 +1,78 @@
+/search:
+  get:
+    tags:
+      - search
+    summary: Search Tweet
+    description: Tìm kiếm bài Tweet
+    operationId: search
+    parameters:
+      - name: page
+        in: query
+        description: Page in pagination
+        required: true
+        schema:
+          type: integer
+          example: 1
+      - name: limit
+        in: query
+        description: Limit in pagination
+        required: true
+        schema:
+          type: integer
+          example: 10
+      - name: content
+        in: query
+        description: Key Search
+        required: true
+        schema:
+          type: string
+          example: NodeJs
+      - name: media_type
+        in: query
+        description: Media Type
+        required: false
+        schema:
+          $ref: '#/components/schemas/MediaSearch'
+      - name: people_follow
+        in: query
+        description: Search Tweet của người follow
+        required: false
+        schema:
+          type: string
+          description: People Follow
+          enum:
+            - on
+    responses:
+      '200':
+        description: Tìm kiếm thành công
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Get New Tweet Successfully
+                result:
+                  type: object
+                  properties:
+                    tweets:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/FullTweet'
+                    page:
+                      type: integer
+                      example: 1
+                    limit:
+                      type: integer
+                      example: 10
+                    total_page:
+                      type: integer
+                      example: 1
+
+      '401':
+        description: Unauthorization
+      '422':
+        description: Query Invalid
+    security:
+      - bearerAuth: []

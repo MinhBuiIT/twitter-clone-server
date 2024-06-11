@@ -1,0 +1,331 @@
+components:
+  schemas:
+    LoginReq:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'minhbuidev10@gmail.com'
+        password:
+          type: string
+          example: 'ak5crmVF*'
+    AuthRes:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY1OTc2ODA1YTU1MjZjNzAyNmQyN2E1Iiwic3RhdHVzX3VzZXIiOjEsInR5cGUiOjAsImlhdCI6MTcxNzgzMTg1MCwiZXhwIjoxNzE3ODMzNjUwfQ.KE7qUFFb_EdGxWDxs8AslbUVp7XdK8a9HE55ENroiTQ'
+        refresh_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY1OTc2ODA1YTU1MjZjNzAyNmQyN2E1IiwidHlwZSI6MSwic3RhdHVzX3VzZXIiOjEsImlhdCI6MTcxNzgzMTg1MCwiZXhwIjoxNzI2NDcxODUwfQ.S3DRVQ9cI5ZA42L9lMMYhHOCsf_i_GOR5NoALRJ15Qc'
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 665976805a5526c7026d27a5
+        name:
+          type: string
+          example: minhbuidev
+        username:
+          type: string
+          example: minhbuidev
+        email:
+          type: string
+          format: email
+          example: minhbuidev10@gmail.com
+        date_of_birth:
+          type: string
+          format: date-time(ISO8601)
+          example: 2024-06-02T10:11:11.529Z
+        created_at:
+          type: string
+          format: date-time(ISO8601)
+          example: 2024-06-02T10:11:11.529Z
+        updated_at:
+          type: string
+          format: date-time(ISO8601)
+          example: 2024-06-02T10:11:11.529Z
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        cicrle_user:
+          type: array
+          items:
+            type: string
+            format: MongoId
+          example: ['665c43b72a97e567e4167f36', '665c43b72a97e567e4167f35']
+        avatar:
+          type: string
+          example: 'http://localhost:4000/static/image/me.jpg'
+        cover_photo:
+          type: string
+          example: 'http://localhost:4000/static/image/bg.jpg'
+        location:
+          type: string
+          example: 'Can Tho City'
+        bio:
+          type: string
+          example: ''
+        website:
+          type: string
+          example: ''
+    UserPatchReq:
+      type: object
+      properties:
+        name:
+          type: string
+          example: minhbuidevUpdate
+        username:
+          type: string
+          example: minhbuidevUpdate
+        date_of_birth:
+          type: string
+          format: date-time(ISO8601)
+          example: 2024-06-02T10:11:11.529Z
+        avatar:
+          type: string
+          example: 'http://localhost:4000/static/image/me.jpg'
+        cover_photo:
+          type: string
+          example: 'http://localhost:4000/static/image/bg.jpg'
+        location:
+          type: string
+          example: 'Can Tho City'
+        bio:
+          type: string
+          example: 'IT Dev'
+        website:
+          type: string
+          example: ''
+    UserStatus:
+      type: integer
+      description: User Status
+      format: Unverified,Verified,Banned
+      enum:
+        - 0
+        - 1
+        - 2
+    RegisterReq:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'buikhaminh2003'
+        email:
+          type: string
+          example: 'buikhaminh2003+11@gmail.com'
+        password:
+          type: string
+          example: 'ak5crmVF*'
+        confirm_password:
+          type: string
+          example: 'ak5crmVF*'
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: '2024-05-13T08:16:25.680Z'
+    ResetPasswordReq:
+      type: object
+      properties:
+        password:
+          type: string
+          example: ak7crmVF*
+        confirm_password:
+          type: string
+          example: ak7crmVF*
+        verify_forgot_password:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY1ZmNhYzUwMWFmNjEzNWUxOWM1NjY0Iiwic3RhdHVzX3VzZXIiOjAsInR5cGUiOjMsImlhdCI6MTcxNzg0NzcyMywiZXhwIjoxNzE4NDUyNTIzfQ.u-6CXM7Dir4rvynC-_3yQ6VWddtjpDxeKYPY2LIVH0U
+    ChangePasswordReq:
+      type: object
+      properties:
+        old_password:
+          type: string
+          example: ak7crmVF*
+        password:
+          type: string
+          example: ak8crmVF*
+        confirm_password:
+          type: string
+          example: ak8crmVF*
+    TweetType:
+      type: integer
+      description: Tweet Type
+      format: Tweet,ReTweet,Comment,QuoteTweet
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+    AudienceType:
+      type: integer
+      description: Audience Type
+      format: EveryOne,TwitterCircle
+      enum:
+        - 0
+        - 1
+    MediaType:
+      type: integer
+      description: Media Type
+      format: Image,Video
+      enum:
+        - 0
+        - 1
+    MediaSearch:
+      type: string
+      description: Media Type
+      format: Image,Video
+      enum:
+        - image
+        - video
+    Media:
+      type: object
+      properties:
+        url:
+          type: string
+          example: https://minhbuidev-twitter-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/image/7918dd7ee85e0f3a380b47f00.jpg
+        type:
+          $ref: '#/components/schemas/MediaType'
+    HashTagType:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 6664692b925c1fea237575b5
+        name:
+          type: string
+          example: trending
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2024-06-02T10:04:49.459+00:00
+    TweetReq:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TweetType'
+        audience:
+          $ref: '#/components/schemas/AudienceType'
+        parent_id:
+          type: string
+          format: MongoId
+          example: 665c43c12a97e567e4169515
+        content:
+          type: string
+          example: Who MinhBuiDev học Nodejs Utilis angustus aedificium tener damno. Capitulus possimus cohaero comitatus vomer sonitus. Patria coadunatio vigor aliqua magni. Surgo conduco vinculum territo xiphias truculenter ancilla teres. Ara cunabula voluntarius asperiores vulnero sequi vesco ago. Damnatio abscido attollo spiritus benigne delinquo. Cado deripio incidunt adopto ancilla appono delibero arcus facilis coma. Sapiente cupiditas patior. Subito arbitro pel crustulum campana atrocitas brevis vinculum. Casso curis valeo bis. Quod somnus cubo dapifer thesaurus venia attollo.
+        hashtags:
+          type: array
+          items:
+            type: string
+        mentions:
+          type: array
+          items:
+            type: string
+            format: MongoId
+          example: ['665c43b72a97e567e4167f36', '665c43b72a97e567e4167f35']
+        media:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              type:
+                $ref: '#/components/schemas/TweetType'
+          example: [{ type: 1, url: https://loremflickr.com/640/480?lock=70036806959104 }]
+    Tweet:
+      allOf:
+        - $ref: '#/components/schemas/TweetReq'
+        - type: object
+          properties:
+            _id:
+              type: string
+              format: MongoId
+              example: 665c43c12a97e567e4169515
+            user_id:
+              type: string
+              format: MongoId
+              example: 665c43b72a97e567e4167f35
+            hashtags:
+              type: array
+              items:
+                type: string
+            view_guest:
+              type: integer
+              example: 0
+            view_user:
+              type: integer
+              example: 0
+            created_at:
+              type: string
+              format: ISO8601
+              example: 2024-06-02T10:04:49.459+00:00
+            updated_at:
+              type: string
+              format: ISO8601
+              example: 2024-06-02T10:04:49.459+00:00
+    FullTweet:
+      allOf:
+        - $ref: '#/components/schemas/Tweet'
+        - type: object
+          properties:
+            user:
+              allOf:
+                - $ref: '#/components/schemas/UserPatchReq'
+                - type: object
+                  properties:
+                    created_at:
+                      type: string
+                      format: ISO8601
+                      example: 2024-06-05T02:17:41.361Z
+                    updated_at:
+                      type: string
+                      format: ISO8601
+                      example: 2024-06-05T02:17:41.361Z
+            mentions:
+              type: array
+              items:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  username:
+                    type: string
+              example:
+                [
+                  {
+                    '_id': '665c43b72a97e567e4167f35',
+                    'name': 'Maynard.Effertz64',
+                    'username': 'user665c43b72a97e567e4167f35'
+                  }
+                ]
+            hashtags:
+              type: array
+              items:
+                $ref: '#/components/schemas/HashTagType'
+              example:
+                [{ '_id': '6664692b925c1fea237575b5', 'name': 'trending', 'created_at': '2024-06-08T14:22:35.448Z' }]
+            bookmark_list:
+              type: integer
+              example: 0
+            like_list:
+              type: integer
+              example: 0
+            retweet_count:
+              type: integer
+              example: 0
+            comment_count:
+              type: integer
+              example: 0
+            quote_count:
+              type: integer
+              example: 0
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

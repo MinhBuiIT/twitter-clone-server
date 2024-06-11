@@ -1,0 +1,161 @@
+paths:
+  /bookmark:
+    post:
+      tags:
+        - bookmark
+      summary: Bookmark Tweet
+      description: Đánh dấu một bài Tweet
+      operationId: bookmark
+      requestBody:
+        description: Gửi Id Tweet
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tweet_id:
+                  type: string
+                  follow: MongoId
+                  example: 665c43c12a97e567e4169515
+        required: true
+      responses:
+        '200':
+          description: Đánh dấu tweet thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bookmark added successfully
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '404':
+          description: Not Found Tweet
+      security:
+        - bearerAuth: []
+  /bookmark/tweet/{tweet_id}:
+    delete:
+      tags:
+        - bookmark
+      summary: Unbookmark Tweet
+      description: Hủy đánh dấu một bài Tweet
+      operationId: unbookmark
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 665c43c12a97e567e4169515
+      responses:
+        '200':
+          description: Hủy đánh dấu tweet thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unbookmark successfully
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '404':
+          description: Not Found Tweet
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - bookmark
+      summary: Check User Bookmark a Tweet
+      description: Kiểm tra người dùng đánh dấu bài tweet
+      operationId: check_bookmark
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 665c43c12a97e567e4169515
+      responses:
+        '200':
+          description: Người dùng đã bookmark bài tweet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get bookmark successfully
+        '400':
+          description: Tweet Id Invalid
+        '401':
+          description: Unauthorization
+        '404':
+          description: User Not Bookmark Tweet
+      security:
+        - bearerAuth: []
+  /bookmark/list:
+    get:
+      tags:
+        - bookmark
+      summary: Get List Bookmark User
+      description: Lấy danh sách tweet được đánh dấu của user
+      operationId: list_bookmark
+      parameters:
+        - name: page
+          in: query
+          description: Page in pagination
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Limit in pagination
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Lấy danh sách bookmark được đánh dấu của user thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get New Tweet Successfully
+                  result:
+                    type: object
+                    properties:
+                      tweets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FullTweet'
+                      page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      total_page:
+                        type: integer
+                        example: 1
+        '401':
+          description: Unauthorization
+      security:
+        - bearerAuth: []

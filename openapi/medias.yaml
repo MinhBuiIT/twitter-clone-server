@@ -1,0 +1,106 @@
+paths:
+  /medias/upload-image:
+    post:
+      tags:
+        - medias
+      summary: Tải lên hình ảnh
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  maxItems: 5
+      responses:
+        '200':
+          description: Tải hình ảnh lên thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Uploading images successfully
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Media'
+      security:
+        - bearerAuth: []
+  /medias/upload-video:
+    post:
+      tags:
+        - medias
+      summary: Tải lên video
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  maxItems: 2
+      responses:
+        '200':
+          description: Tải video lên thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Uploading images successfully
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Media'
+      security:
+        - bearerAuth: []
+  /medias/upload-hls-video:
+    post:
+      tags:
+        - medias
+      summary: Tải lên hls video
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  maxItems: 1
+      responses:
+        '200':
+          description: Đang phân giải HLS Video
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Uploading videos successfully
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Media'
+      security:
+        - bearerAuth: []
