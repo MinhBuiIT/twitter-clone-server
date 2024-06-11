@@ -9,7 +9,7 @@
     "dev:production": "NODE_ENV=production npx nodemon",
     "build": "rimraf ./dist && tsc && tsc-alias",
     "start:dev": "NODE_ENV=development node dist/index.js",
-    "start:production": "NODE_ENV=production node dist/index.js",
+    "start:production": "node dist/index.js",
     "start:staging": "NODE_ENV=staging node dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
